@@ -30,8 +30,19 @@ std::vector<char> NetworkConnector::send(std::vector<char> data)
 		return buffer;
 	}
 
-	result = connection.Recv(buffer, 1000);
+	std::string buffer2;
+	vector<char> tempBuffer(1000);
+	do
+	{
+		result = connection.Recv(tempBuffer, 1000);
+		if (result > 0)
+		{
+			buffer2.append(tempBuffer.data());
+		}
+	} while (result > 0);
 
+	int error = WSAGetLastError();
+	//cout << error << " Error" << endl;
 	connection.Disconnect();
 
 	return buffer;

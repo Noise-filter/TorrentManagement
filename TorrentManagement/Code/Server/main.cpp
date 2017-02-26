@@ -5,8 +5,12 @@ using namespace std;
 #include "NoiseNetwork\Core\ThreadedAcceptServer.h"
 #include "NoiseNetwork\Core\StreamConnection.h"
 
+vector<char> testingScanner();
+
 int main()
 {
+	vector<char> filenames = testingScanner();
+
 	if (InitWinSock())
 	{
 		return 1;
@@ -37,7 +41,19 @@ int main()
 			SOCKET socket = acceptServer.GetConnectedClient();
 			cout << socket << " connected" << endl;
 			StreamSocket client(socket);
-			if (client.Send(buffer, buffer.size()) == INVALID_SOCKET)
+
+			int result = 0;
+			int messageSize = filenames.size();
+			do
+			{
+				result = client.Send(filenames, messageSize);
+				if (result > 0)
+				{
+					messageSize -= result;
+				}
+			} while (result > 0 && messageSize > 0);
+
+			if (result == INVALID_SOCKET)
 			{
 				int error = WSAGetLastError();
 				cout << error << " Error" << endl;
@@ -53,6 +69,36 @@ int main()
 	acceptServer.Stop();
 
 	ShutdownWinSock();
+	
 
 	return 0;
+}
+
+#include "MediaScanner.h"
+#include "FileScanner.h"
+
+#include <algorithm>
+
+vector<char> testingScanner()
+{
+	Collection collection("Test", "C:\\shared2", CollectionType::TV);
+
+	FileScanner scanner;
+	File* file = scanner.scan("\\\\NAS/Movies", true);
+	int size = sizeof(*file);
+	vector<File*> files = *file->getFiles();
+	sort(files.begin(), files.end(), [](File* lhs, File* rhs)
+	{
+		return (*lhs < *rhs);
+	});
+
+	string filenames;
+
+	for (File* f : files)
+	{
+		filenames.append(f->getName() + '|');
+		//cout << f->getName() << endl;
+	}
+	
+	return vector<char>(filenames.begin(), filenames.end());
 }

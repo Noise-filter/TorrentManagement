@@ -167,7 +167,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Collection.cpp" />
+    <ClCompile Include="File.cpp" />
+    <ClCompile Include="FileScanner.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MediaScanner.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Collection.h" />
+    <ClInclude Include="Episode.h" />
+    <ClInclude Include="File.h" />
+    <ClInclude Include="FileScanner.h" />
+    <ClInclude Include="Media.h" />
+    <ClInclude Include="MediaScanner.h" />
+    <ClInclude Include="Movie.h" />
+    <ClInclude Include="Season.h" />
+    <ClInclude Include="Series.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -30,7 +30,7 @@ public:
 	//Closes the socket
 	void Close();
 
-	//Will 
+	//Will not clear or resize the buffer
 	int Send(std::vector<char>& buffer, int bufLength);
 
 	//Will not clear or resize the buffer
